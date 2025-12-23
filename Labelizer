@@ -536,8 +536,8 @@
     // ==========================
     // CONFIG SUPABASE (À REMPLACER)
     // ==========================
-    const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
+    const SUPABASE_URL = "https://gpysazxtguhuelrwgwhk.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdweXNhenh0Z3VodWVscndnd2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0NjkyMzksImV4cCI6MjA4MjA0NTIzOX0.LtgX4K81vS_pBprPcQ5zMEtygg9V9jHHxx1f-w08kTM";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // ========= PRODUITS PAR DÉFAUT (TA LISTE) =========
