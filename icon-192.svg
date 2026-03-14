@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title>Labelizer</title>
+  <rect width="1024" height="1024" fill="#adc2ab"/>
+  <g fill="#f6ece6" text-anchor="middle">
+    <text x="512" y="350" font-size="62" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" letter-spacing="2">GLACES ARTISANALES</text>
+    <text x="512" y="565" font-size="190" font-family="Snell Roundhand, Brush Script MT, Apple Chancery, cursive" font-weight="600">Vanille</text>
+    <text x="512" y="675" font-size="108" font-family="Snell Roundhand, Brush Script MT, Apple Chancery, cursive">&amp;</text>
+    <text x="512" y="845" font-size="190" font-family="Snell Roundhand, Brush Script MT, Apple Chancery, cursive" font-weight="600">Compagnie</text>
+  </g>
+</svg>
