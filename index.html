@@ -293,6 +293,7 @@
 
     body.format-90 .label-preview { width: 90mm; height: 29mm; }
     body.format-62 .label-preview { width: 62mm; height: auto; min-height: 29mm; }
+    body.format-29 .label-preview { width: 90mm; height: 29mm; }
 
     .label-header {
       display: flex;
@@ -308,7 +309,7 @@
 
     .label-name {
       font-weight: 700;
-      font-size: 10.5pt;
+      font-size: 10pt;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -323,29 +324,92 @@
     }
 
     .label-section {
-      font-size: 8pt;
-      line-height: 1.15;
-      margin-bottom: 0.7mm;
+      font-size: 7.2pt;
+      line-height: 1.08;
+      margin-bottom: 0.45mm;
+    }
+
+    .label-barcode-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0.35mm 0 0 0;
+    }
+
+    .label-barcode {
+      width: 100%;
+      max-width: 100%;
+      height: 24px;
+      display: block;
     }
 
     .label-footer {
       flex-shrink: 0;
-      font-size: 6pt;
-      margin-top: 0.5mm;
+      font-size: 5.5pt;
+      margin-top: 0.2mm;
       text-align: center;
     }
 
-    .label-preview.tight .label-name { font-size: 8.5pt; }
+    .label-preview.tight .label-name { font-size: 8pt; }
     .label-preview.tight .label-dlc-top { font-size: 6.7pt; }
     .label-preview.tight .label-qty-top { font-size: 6.3pt; }
-    .label-preview.tight .label-section { font-size: 6.7pt; line-height: 1.05; margin-bottom: 0.4mm; }
-    .label-preview.tight .label-footer { font-size: 5.3pt; margin-top: 0.3mm; }
+    .label-preview.tight .label-section { font-size: 5.8pt; line-height: 1.02; margin-bottom: 0.25mm; }
+    .label-preview.tight .label-footer { font-size: 4.8pt; margin-top: 0.15mm; }
+    .label-preview.tight .label-barcode { height: 20px; }
+
+    .label-preview.production-label {
+      justify-content: flex-start;
+      padding-top: 1.1mm;
+      padding-bottom: 1.1mm;
+    }
+    .label-preview.production-label .label-header {
+      align-items: flex-start;
+      margin-bottom: 0.8mm;
+    }
+    .label-preview.production-label .label-header-left {
+      flex: 1 1 100%;
+      margin-right: 0;
+    }
+    .label-preview.production-label .label-name {
+      font-size: 15.5pt;
+      line-height: 0.95;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+    .label-preview.production-label .label-header-center {
+      flex: 0 0 auto;
+      margin: 0 1.5mm 0 0;
+      align-self: flex-end;
+    }
+    .label-preview.production-label .label-header-right {
+      min-width: 0;
+      align-self: flex-end;
+    }
+    .label-preview.production-label .label-dlc-top {
+      font-size: 9pt;
+    }
+    .label-preview.production-label .label-qty-top {
+      font-size: 10pt;
+    }
+    .label-preview.production-label .label-body {
+      flex: 1 1 auto;
+      min-height: 14mm;
+      display: flex;
+      align-items: flex-end;
+    }
+    .label-preview.production-label .label-body .label-name {
+      width: 100%;
+      font-size: 16pt;
+    }
 
     @page { size: 90mm 29mm; margin: 0; }
 
     @media print {
       html, body { margin: 0 !important; padding: 0 !important; }
       body.format-62 { width: 62mm !important; }
+      body.format-29 { width: 90mm !important; height: 29mm !important; }
       body > * { display: none !important; }
       .print-label-only { display: block !important; }
       .print-label-only .label-preview { border: none !important; margin: 0 !important; }
@@ -370,7 +434,7 @@
   </div>
 
   <div class="print-warning">
-    ✅ <b>Important :</b> lors de l’impression, vérifiez le <b>format papier / taille d’étiquette</b> (90×29 ou 62mm).
+    ✅ <b>Important :</b> lors de l’impression, vérifiez le <b>format papier / taille d’étiquette</b> (90×29, 62mm ou 29mm Brother).
     Sinon l’étiquette peut sortir coupée ou mal centrée.
   </div>
 
@@ -380,6 +444,7 @@
       <select id="labelFormat">
         <option value="90">90 × 29 mm</option>
         <option value="62">62 mm de large (hauteur auto)</option>
+        <option value="29">29 mm (Brother tape)</option>
       </select>
     </div>
 
@@ -410,6 +475,30 @@
 
       <small>Appuyez sur un produit pour l’ajouter au panier (1 unité).</small>
       <div class="product-list" id="productList"></div>
+
+      <div class="divider"></div>
+
+      <h2>Production</h2>
+      <small>Ajoutez rapidement une étiquette de bac de production au panier avec un volume prédéfini.</small>
+
+      <div class="form-grid">
+        <div>
+          <label for="productionProduct">Produit</label>
+          <select id="productionProduct"></select>
+        </div>
+
+        <div>
+          <label for="productionSize">Contenant</label>
+          <select id="productionSize">
+            <option value="2.5 L">2.5 L</option>
+            <option value="5 L">5 L</option>
+          </select>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" id="btnAddProduction" type="button">Add to cart</button>
+        </div>
+      </div>
 
       <div class="divider"></div>
 
@@ -504,7 +593,7 @@
               <div class="label-dlc-top" id="prevDLC">DLC : --/--/----</div>
             </div>
             <div class="label-header-right">
-              <div class="label-qty-top" id="prevPoids">0 mL</div>
+              <div class="label-qty-top" id="prevPoids">1 L</div>
             </div>
           </div>
 
@@ -513,7 +602,11 @@
             <div class="label-section" id="prevCons"></div>
           </div>
 
-          <div class="label-footer">
+          <div id="prevBarcodeWrap" class="label-barcode-wrap" style="display:none;">
+            <svg id="prevBarcode" class="label-barcode"></svg>
+          </div>
+
+          <div class="label-footer" id="prevFooter">
             Vanille &amp; Compagnie, 43B Rue Reine Elisabeth, 1480 Tubize
           </div>
         </div>
@@ -530,6 +623,7 @@
     <div id="printLabelsContainer"></div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
@@ -539,6 +633,17 @@
     const SUPABASE_URL = "https://gpysazxtguhuelrwgwhk.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdweXNhenh0Z3VodWVscndnd2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0NjkyMzksImV4cCI6MjA4MjA0NTIzOX0.LtgX4K81vS_pBprPcQ5zMEtygg9V9jHHxx1f-w08kTM";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const BARCODE_MAP = {
+      "Vanille":"5419980668301",
+      "Chocolat":"5419980668318",
+      "Pistache":"5419980668332",
+      "Praliné":"5419980668325",
+      "Speculoos":"5419980668349",
+      "Stracciatella":"5419980668356",
+      "Fraise":"5419980668363",
+      "Citron":"5419980668370"
+    };
 
     // ========= PRODUITS PAR DÉFAUT (TA LISTE) =========
     const defaultProducts = [
@@ -615,6 +720,79 @@
         .replaceAll("'", "&#039;");
     }
 
+    function getBarcodeValue(productName) {
+      return BARCODE_MAP[productName] || "";
+    }
+
+    function renderBarcode(target, value) {
+      if (!target) return;
+      if (!value || typeof JsBarcode === "undefined") {
+        target.innerHTML = "";
+        return;
+      }
+
+      try {
+        JsBarcode(target, value, {
+          format: "CODE128",
+          displayValue: true,
+          fontSize: 7,
+          textMargin: 1,
+          margin: 0,
+          height: 24,
+          width: 0.9,
+          background: "#ffffff",
+          lineColor: "#000000"
+        });
+      } catch (_err) {
+        target.innerHTML = "";
+      }
+    }
+
+    function syncProductionOptions() {
+      const sel = document.getElementById("productionProduct");
+      if (!sel) return;
+
+      const current = sel.value;
+      sel.innerHTML = "";
+
+      if (products.length === 0) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Aucun produit";
+        sel.appendChild(opt);
+        return;
+      }
+
+      products.forEach(p => {
+        const o = document.createElement("option");
+        o.value = normalizeName(p.name);
+        o.textContent = `${p.name} (${p.category})`;
+        sel.appendChild(o);
+      });
+
+      if ([...sel.options].some(o => o.value === current)) sel.value = current;
+    }
+
+    function getSelectedProductionProduct() {
+      const key = document.getElementById("productionProduct").value;
+      return products.find(x => normalizeName(x.name) === key) || null;
+    }
+
+    function getCartKey(product) {
+      if (product.cartKey) return product.cartKey;
+      if (product.labelType === 'production') {
+        return `production::${product.name}::${product.productionSize || ''}`;
+      }
+      return product.name;
+    }
+
+    function getDisplayName(item) {
+      if (item.labelType === 'production') {
+        return `${item.name} [Production ${item.productionSize}]`;
+      }
+      return item.name;
+    }
+
     // ========= SUPABASE : LOAD / SAVE =========
     async function loadProductsFromDB() {
       const { data, error } = await supabase
@@ -634,6 +812,7 @@
         .map(p => ({ name: p.name, category: p.category, ingredients: p.ingredients }));
 
       renderEditPick();
+      syncProductionOptions();
     }
 
     async function upsertProductToDB({ name, category, ingredients }) {
@@ -669,7 +848,6 @@
     }
 
     async function importDefaults() {
-      // upsert en batch
       const payload = defaultProducts.map(p => ({
         name: p.name,
         category: p.category,
@@ -762,7 +940,6 @@
       try {
         await upsertProductToDB({ name, category: cat, ingredients: ing });
         alert(pickKey ? "Parfum modifié ✅" : "Parfum ajouté ✅");
-        // Pas besoin de reload ici : le realtime déclenche le refresh chez tous
       } catch (e) {
         alert("Erreur sauvegarde: " + (e?.message || e));
       }
@@ -784,7 +961,6 @@
       try {
         await hideProductInDB(p.name);
 
-        // retirer du panier si présent
         const inCartIdx = cart.findIndex(c => normalizeName(c.name) === pickKey);
         if (inCartIdx >= 0) cart.splice(inCartIdx, 1);
 
@@ -808,17 +984,35 @@
 
     // ========= PANIER =========
     function addToCart(product) {
-      const existing = cart.find(item => item.name === product.name);
+      const cartKey = getCartKey(product);
+      const existing = cart.find(item => item.cartKey === cartKey);
       if (existing) existing.qty += 1;
-      else cart.push({ ...product, qty: 1 });
+      else cart.push({ ...product, cartKey, qty: 1 });
 
       renderCart();
       updatePreviewLabel();
     }
 
+    function handleAddProduction() {
+      const product = getSelectedProductionProduct();
+      if (!product) {
+        alert("Choisissez un produit pour la production.");
+        return;
+      }
+
+      const weight = document.getElementById("productionSize").value;
+      addToCart({
+        ...product,
+        labelType: 'production',
+        productionSize: weight,
+        productionDate: formatDateDDMMYYYY(new Date()),
+        cartKey: `production::${product.name}::${weight}`
+      });
+    }
+
     // Exposer pour les onclick générés
     window.changeQty = function(name, delta) {
-      const item = cart.find(c => c.name === name);
+      const item = cart.find(c => c.cartKey === name);
       if (!item) return;
       item.qty += delta;
       if (item.qty <= 0) cart.splice(cart.indexOf(item), 1);
@@ -828,7 +1022,7 @@
 
     window.setQty = function(name, value) {
       const n = parseInt(value, 10);
-      const item = cart.find(c => c.name === name);
+      const item = cart.find(c => c.cartKey === name);
       if (!item) return;
 
       if (isNaN(n) || n <= 0) cart.splice(cart.indexOf(item), 1);
@@ -839,7 +1033,7 @@
     };
 
     window.removeFromCart = function(name) {
-      const idx = cart.findIndex(c => c.name === name);
+      const idx = cart.findIndex(c => c.cartKey === name);
       if (idx >= 0) cart.splice(idx, 1);
       renderCart();
       updatePreviewLabel();
@@ -860,11 +1054,11 @@
 
       let html = '<table class="cart-table"><thead><tr><th>Produit</th><th>Cat.</th><th>Qté</th><th></th></tr></thead><tbody>';
       cart.forEach(item => {
-        const safeName = item.name.replace(/'/g, "\\'");
+        const safeName = item.cartKey.replace(/'/g, "\\'");
         html += `
           <tr>
-            <td>${escapeHtml(item.name)}</td>
-            <td>${escapeHtml(item.category)}</td>
+            <td>${escapeHtml(getDisplayName(item))}</td>
+            <td>${escapeHtml(item.labelType === 'production' ? 'Production' : item.category)}</td>
             <td class="qty-cell">
               <button class="qty-btn" onclick="changeQty('${safeName}', -1)">-</button>
               <input class="qty-input" type="number" min="0" value="${item.qty}"
@@ -893,6 +1087,9 @@
       const prevCons = document.getElementById('prevCons');
       const prevPoids = document.getElementById('prevPoids');
       const prevDLC = document.getElementById('prevDLC');
+      const prevBarcodeWrap = document.getElementById('prevBarcodeWrap');
+      const prevBarcode = document.getElementById('prevBarcode');
+      const prevFooter = document.getElementById('prevFooter');
       const hint = document.getElementById('previewHint');
 
       if (cart.length === 0) {
@@ -900,8 +1097,11 @@
         prevNom.textContent = 'Nom du produit';
         prevIng.textContent = 'Ingrédients : …';
         prevCons.textContent = '';
-        prevPoids.textContent = '0 mL';
+        prevPoids.textContent = '1 L';
         prevDLC.textContent = 'DLC : --/--/----';
+        prevBarcodeWrap.style.display = 'none';
+        prevBarcode.innerHTML = '';
+        prevFooter.style.display = 'block';
         hint.style.display = 'block';
         return;
       }
@@ -909,15 +1109,38 @@
       hint.style.display = 'none';
       const first = cart[0];
       const { poids, dlc, cons } = getCommonFields();
-
+      const barcode = getBarcodeValue(first.name);
       prevNom.textContent = first.name;
-      prevIng.textContent = 'Ingrédients : ' + first.ingredients;
-      prevCons.textContent = cons || '';
-      prevPoids.textContent = poids || '0 mL';
-      prevDLC.textContent = 'DLC : ' + dlc;
 
-      if (isTight(first.ingredients, cons)) prevLabel.classList.add('tight');
-      else prevLabel.classList.remove('tight');
+      if (first.labelType === 'production') {
+        prevLabel.classList.add('production-label');
+        prevLabel.classList.remove('tight');
+        prevIng.textContent = first.name;
+        prevCons.textContent = '';
+        prevPoids.textContent = first.productionSize || '1 L';
+        prevDLC.textContent = 'Production : ' + (first.productionDate || formatDateDDMMYYYY(new Date()));
+        prevBarcodeWrap.style.display = 'none';
+        prevBarcode.innerHTML = '';
+        prevFooter.style.display = 'none';
+      } else {
+        prevLabel.classList.remove('production-label');
+        prevIng.textContent = 'Ingrédients : ' + first.ingredients;
+        prevCons.textContent = cons || '';
+        prevPoids.textContent = poids || '1 L';
+        prevDLC.textContent = 'DLC : ' + dlc;
+        prevFooter.style.display = 'block';
+
+        if (barcode) {
+          prevBarcodeWrap.style.display = 'flex';
+          renderBarcode(prevBarcode, barcode);
+        } else {
+          prevBarcodeWrap.style.display = 'none';
+          prevBarcode.innerHTML = '';
+        }
+
+        if (isTight(first.ingredients, cons)) prevLabel.classList.add('tight');
+        else prevLabel.classList.remove('tight');
+      }
     }
 
     // ========= IMPRESSION =========
@@ -929,32 +1152,58 @@
       const { poids, dlc, cons } = getCommonFields();
 
       cart.forEach(item => {
-        const tight = isTight(item.ingredients, cons);
+        const tight = item.labelType === 'production' ? false : isTight(item.ingredients, cons);
+        const barcode = getBarcodeValue(item.name);
         for (let i = 0; i < item.qty; i++) {
           const wrap = document.createElement('div');
           wrap.className = 'label-preview' + (tight ? ' tight' : '');
-          wrap.innerHTML = `
-            <div class="label-header">
-              <div class="label-header-left">
+          if (item.labelType === 'production') {
+            wrap.className += ' production-label';
+            wrap.innerHTML = `
+              <div class="label-header">
+                <div class="label-header-left">
+                  <div></div>
+                </div>
+                <div class="label-header-center">
+                  <div class="label-dlc-top">Production : ${escapeHtml(item.productionDate || formatDateDDMMYYYY(new Date()))}</div>
+                </div>
+                <div class="label-header-right">
+                  <div class="label-qty-top">${escapeHtml(item.productionSize || '1 L')}</div>
+                </div>
+              </div>
+              <div class="label-body">
                 <div class="label-name">${escapeHtml(item.name)}</div>
               </div>
-              <div class="label-header-center">
-                <div class="label-dlc-top">DLC : ${escapeHtml(dlc || '--/--/----')}</div>
+            `;
+          } else {
+            wrap.innerHTML = `
+              <div class="label-header">
+                <div class="label-header-left">
+                  <div class="label-name">${escapeHtml(item.name)}</div>
+                </div>
+                <div class="label-header-center">
+                  <div class="label-dlc-top">DLC : ${escapeHtml(dlc || '--/--/----')}</div>
+                </div>
+                <div class="label-header-right">
+                  <div class="label-qty-top">${escapeHtml(poids || '1 L')}</div>
+                </div>
               </div>
-              <div class="label-header-right">
-                <div class="label-qty-top">${escapeHtml(poids || '0 mL')}</div>
+              <div class="label-body">
+                <div class="label-section">Ingrédients : ${escapeHtml(item.ingredients)}</div>
+                ${cons ? `<div class="label-section">${escapeHtml(cons)}</div>` : ''}
               </div>
-            </div>
-            <div class="label-body">
-              <div class="label-section">Ingrédients : ${escapeHtml(item.ingredients)}</div>
-              ${cons ? `<div class="label-section">${escapeHtml(cons)}</div>` : ''}
-            </div>
-            <div class="label-footer">
-              Vanille &amp; Compagnie, 43B Rue Reine Elisabeth, 1480 Tubize
-            </div>
-          `;
+              ${barcode ? '<div class="label-barcode-wrap"><svg class="label-barcode" data-barcode="' + escapeHtml(barcode) + '"></svg></div>' : ''}
+              <div class="label-footer">
+                Vanille &amp; Compagnie, 43B Rue Reine Elisabeth, 1480 Tubize
+              </div>
+            `;
+          }
           container.appendChild(wrap);
         }
+      });
+
+      container.querySelectorAll('[data-barcode]').forEach(node => {
+        renderBarcode(node, node.getAttribute('data-barcode'));
       });
     }
 
@@ -971,8 +1220,10 @@
     // ========= FORMAT =========
     function updateFormatClass() {
       const format = document.getElementById('labelFormat').value;
-      document.body.classList.remove('format-90', 'format-62');
-      document.body.classList.add(format === '62' ? 'format-62' : 'format-90');
+      document.body.classList.remove('format-90', 'format-62', 'format-29');
+      if (format === '62') document.body.classList.add('format-62');
+      else if (format === '29') document.body.classList.add('format-29');
+      else document.body.classList.add('format-90');
     }
 
     // ========= REALTIME =========
@@ -993,6 +1244,7 @@
     document.getElementById('filterCat').addEventListener('change', renderProducts);
     document.getElementById('btnClearCart').addEventListener('click', clearCart);
     document.getElementById('btnPrintAll').addEventListener('click', handlePrintAll);
+    document.getElementById('btnAddProduction').addEventListener('click', handleAddProduction);
 
     document.getElementById('btnResetDLC').addEventListener('click', () => {
       document.getElementById('inputDLC').value = todayPlus4Months();
@@ -1024,10 +1276,9 @@
       }
     });
 
-    // DLC par défaut
+    document.getElementById('inputPoids').value = '1 L';
     document.getElementById('inputDLC').value = todayPlus4Months();
 
-    // Go
     updateFormatClass();
     await loadProductsFromDB();
     renderProducts();
