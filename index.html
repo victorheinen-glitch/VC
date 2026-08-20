@@ -1,484 +1,353 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Labelizer" />
-  <link rel="manifest" href="./manifest.json" />
-  <link rel="icon" type="image/svg+xml" sizes="192x192" href="./icons/icon-192.svg" />
-  <link rel="icon" type="image/svg+xml" sizes="512x512" href="./icons/icon-512.svg" />
-  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.svg" />
-  <title>LABELIZER – Glaces & Sorbets (Temps réel)</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#f5f5f7" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Labelizer" />
+<title>Labelizer — Glaces &amp; Sorbets</title>
 
-  <style>
-    :root{
-      --bg:#0b1220;
-      --card:#121b2f;
-      --muted:#9bb0d0;
-      --text:#e8eefc;
-      --accent:#6ea8ff;
-      --accent2:#55d38b;
-      --warn:#ffcc66;
-      --bad:#ff6b6b;
-      --border:rgba(255,255,255,.10);
-      --shadow:0 18px 60px rgba(0,0,0,.28);
-    }
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --card:#ffffff;
+    --text:#1d1d1f;
+    --muted:#86868b;
+    --accent:#0071e3;
+    --accent-soft:rgba(0,113,227,.08);
+    --accent-soft-strong:rgba(0,113,227,.14);
+    --success:#1fa855;
+    --success-soft:rgba(31,168,85,.10);
+    --danger:#ff3b30;
+    --danger-soft:rgba(255,59,48,.08);
+    --border:rgba(0,0,0,.08);
+    --shadow:0 1px 2px rgba(0,0,0,.04), 0 10px 30px rgba(0,0,0,.06);
+    --radius-lg:20px;
+    --radius-md:14px;
+    --radius-sm:10px;
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
 
-    *{ box-sizing:border-box; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-    body{
-      margin:0;
-      padding:16px;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-      color:var(--text);
-      background: linear-gradient(180deg,#070b14,#0b1220);
-    }
+  body{
+    margin:0;
+    padding:20px;
+    font-family:var(--font);
+    color:var(--text);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
 
-    h1{ margin:0 0 4px 0; font-size:20px; }
-    .subtitle{
-      margin:0 0 10px 0;
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.35;
-    }
+  h1{ margin:0 0 2px 0; font-size:22px; font-weight:700; letter-spacing:-.01em; }
+  h2{ margin:0 0 10px 0; font-size:14px; font-weight:700; letter-spacing:-.005em; }
 
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
+  .subtitle{
+    margin:0;
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.4;
+    max-width:640px;
+  }
 
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:7px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
-      border:1px solid var(--border);
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-    }
+  .topbar{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
 
-    .pill b{ color:var(--text); }
-    .dot{ font-weight:900; }
-    .ok{ color:var(--accent2); }
-    .bad{ color:var(--bad); }
-    .warn{ color:var(--warn); }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 12px;
+    border-radius:999px;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--muted);
+    font-size:12px;
+    font-weight:600;
+    white-space:nowrap;
+    box-shadow:var(--shadow);
+  }
+  .pill b{ color:var(--text); font-weight:700; }
+  .dot{ font-size:10px; }
+  .ok{ color:var(--success); }
+  .bad{ color:var(--danger); }
 
-    .print-warning{
-      margin:0 0 12px 0;
-      font-size:12px;
-      color:var(--text);
-      background: rgba(255,204,102,.12);
-      border: 1px solid rgba(255,204,102,.35);
-      padding:10px 12px;
-      border-radius:14px;
-    }
+  .banner{
+    margin:0 0 16px 0;
+    font-size:12.5px;
+    color:var(--text);
+    background:var(--accent-soft);
+    border:1px solid var(--accent-soft-strong);
+    padding:11px 14px;
+    border-radius:var(--radius-md);
+    line-height:1.45;
+  }
+  .banner b{ font-weight:700; }
 
-    .top-controls{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-      font-size:13px;
-    }
+  .layout{
+    display:grid;
+    grid-template-columns: minmax(260px,1.15fr) minmax(240px,.9fr) minmax(230px,1fr);
+    gap:16px;
+    align-items:start;
+  }
+  @media (max-width:1000px){ .layout{ grid-template-columns:1fr; } }
 
-    label{ font-size:12px; font-weight:650; color:var(--muted); }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:16px;
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+  }
 
-    select, input, textarea{
-      width:100%;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-      padding:10px 11px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.22);
-      color: var(--text);
-      outline:none;
-      font-size:13px;
-    }
+  .card small{ color:var(--muted); font-size:11.5px; line-height:1.4; display:block; }
 
-    textarea{
-      resize: vertical;
-      min-height: 80px;
-    }
+  label{ font-size:11.5px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px; }
 
-    select:focus, input:focus, textarea:focus{
-      border-color: rgba(110,168,255,.55);
-      box-shadow: 0 0 0 3px rgba(110,168,255,.10);
-    }
+  select, input, textarea{
+    width:100%;
+    font-family:var(--font);
+    padding:10px 12px;
+    border-radius:var(--radius-sm);
+    border:1px solid var(--border);
+    background:#fbfbfd;
+    color:var(--text);
+    outline:none;
+    font-size:13.5px;
+  }
+  textarea{ resize:vertical; min-height:76px; line-height:1.4; }
+  select:focus, input:focus, textarea:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
+    background:#fff;
+  }
 
-    .layout{
-      display:grid;
-      grid-template-columns: minmax(260px, 1.2fr) minmax(260px, 1fr) minmax(260px, 1.2fr);
-      gap:16px;
-      align-items:start;
-    }
+  .filter-row{ display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap; margin-bottom:10px; }
+  .field{ margin-bottom:12px; }
+  .field:last-child{ margin-bottom:0; }
+  .divider{ height:1px; background:var(--border); margin:16px 0; }
 
-    @media (max-width: 1000px){
-      .layout{ grid-template-columns: 1fr; }
-    }
+  .product-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+    gap:8px;
+  }
 
-    .card{
-      background: rgba(18,27,47,.82);
-      border:1px solid rgba(255,255,255,.08);
-      padding: 14px 14px;
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-    }
+  .product-btn{
+    border-radius:var(--radius-sm);
+    border:1px solid var(--border);
+    padding:10px 11px;
+    text-align:left;
+    cursor:pointer;
+    background:#fbfbfd;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    transition:transform .1s ease, background .12s ease, border-color .12s ease;
+  }
+  .product-btn:hover{ background:var(--accent-soft); border-color:var(--accent); transform:translateY(-1px); }
+  .product-btn:active{ transform:translateY(0); }
+  .product-name{ font-weight:700; font-size:13px; color:var(--text); }
+  .product-cat{ font-size:10.5px; color:var(--muted); font-weight:600; }
 
-    .card h2{
-      margin:0 0 8px 0;
-      font-size:16px;
-      letter-spacing:.2px;
-    }
+  .btn{
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#fff;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .btn:hover{ background:#0077ed; }
+  .btn:active{ background:#0068d1; }
 
-    .card small{
-      color:var(--muted);
-      font-size:11px;
-      line-height:1.35;
-      display:block;
-    }
+  .btn.secondary{ background:#fbfbfd; color:var(--text); border-color:var(--border); }
+  .btn.secondary:hover{ background:#f0f0f2; }
 
-    .filter-row{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-bottom:10px;
-    }
+  .btn.danger{ background:var(--danger-soft); color:var(--danger); border-color:rgba(255,59,48,.18); }
+  .btn.danger:hover{ background:rgba(255,59,48,.14); }
 
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,.08);
-      margin: 12px 0;
-    }
+  .btn.full{ width:100%; }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
 
-    .product-list{
-      margin-top: 10px;
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
-    }
+  .cart-table{ width:100%; border-collapse:collapse; font-size:13px; }
+  .cart-table th, .cart-table td{ padding:8px 4px; border-bottom:1px solid var(--border); text-align:left; vertical-align:middle; }
+  .cart-table th{ color:var(--muted); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.02em; }
+  .cart-table tr:last-child td{ border-bottom:none; }
+  .qty-cell{ white-space:nowrap; }
 
-    .product-btn{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      padding: 10px 10px;
-      text-align:left;
-      cursor:pointer;
-      background: rgba(255,255,255,.04);
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      transition: transform .05s ease, background .12s ease, border-color .12s ease;
-    }
-    .product-btn:hover{
-      background: rgba(110,168,255,.10);
-      border-color: rgba(110,168,255,.45);
-      transform: translateY(-1px);
-    }
+  .qty-btn{
+    width:26px; height:26px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:#fbfbfd;
+    color:var(--text);
+    cursor:pointer;
+    font-size:14px;
+    font-weight:700;
+    line-height:1;
+  }
+  .qty-btn:hover{ background:#f0f0f2; }
 
-    .product-name{ font-weight:700; font-size:13px; color:var(--text); }
-    .product-cat{ font-size:11px; color:var(--muted); }
+  .qty-input{
+    width:44px;
+    padding:5px 4px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:#fbfbfd;
+    color:var(--text);
+    font-size:12.5px;
+    text-align:center;
+    outline:none;
+    margin:0 4px;
+  }
 
-    .btn{
-      padding: 10px 12px;
-      border-radius: 12px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(110,168,255,.18);
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 700;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-    .btn:hover{ background: rgba(110,168,255,.24); }
+  .empty-hint{ font-size:12.5px; color:var(--muted); padding:10px 2px; }
 
-    .btn.secondary{
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-    }
-    .btn.secondary:hover{ background: rgba(255,255,255,.08); }
+  /* ===================== ÉTIQUETTE — Brother TD-2135NWB, 51 × 26 mm ===================== */
+  .label-preview{
+    width:51mm;
+    height:26mm;
+    border:1px solid var(--border);
+    border-radius:2px;
+    padding:1.3mm 1.7mm;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    background:#fff;
+    color:#000;
+    overflow:hidden;
+  }
 
-    .btn.danger{
-      background: rgba(255,107,107,.18);
-    }
-    .btn.danger:hover{ background: rgba(255,107,107,.26); }
+  .label-header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:1.5mm;
+    flex-shrink:0;
+  }
+  .label-name{
+    flex:1 1 auto;
+    font-weight:700;
+    font-size:7.6pt;
+    line-height:1.05;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .label-qty-top{ flex:0 0 auto; font-size:5.8pt; font-weight:700; white-space:nowrap; }
 
-    .btn-row{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
+  .label-subheader{
+    display:flex;
+    justify-content:space-between;
+    gap:1.5mm;
+    flex-shrink:0;
+    margin-bottom:0.4mm;
+  }
+  .label-dlc-top{ font-size:5.4pt; font-weight:600; color:#111; }
 
-    .form-grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
-      margin-top:10px;
-    }
+  .label-body{ flex:1 1 auto; overflow:hidden; min-height:0; }
 
-    .inline-field{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .inline-field input{ flex:1; }
+  .label-section{
+    font-size:4.4pt;
+    line-height:1.15;
+    margin-bottom:0.3mm;
+    overflow:hidden;
+    display:-webkit-box;
+    -webkit-line-clamp:4;
+    -webkit-box-orient:vertical;
+  }
 
-    .cart-table{
-      width:100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      overflow:hidden;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.08);
-    }
+  .label-barcode-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    margin-top:0.3mm;
+    flex-shrink:0;
+  }
+  .label-barcode{ max-width:100%; display:block; }
 
-    .cart-table th, .cart-table td{
-      padding: 8px 8px;
-      border-bottom:1px solid rgba(255,255,255,.07);
-      text-align:left;
-      vertical-align:middle;
-    }
-    .cart-table th{
-      color: var(--muted);
-      font-weight:800;
-      font-size: 12px;
-      background: rgba(255,255,255,.04);
-    }
+  .label-footer{
+    flex-shrink:0;
+    margin-top:0.3mm;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .label-logo{ height:3mm; width:auto; display:block; }
 
-    .qty-cell{ white-space:nowrap; }
+  /* Texte plus long → resserré */
+  .label-preview.tight .label-name{ font-size:6.9pt; }
+  .label-preview.tight .label-dlc-top{ font-size:4.9pt; }
+  .label-preview.tight .label-qty-top{ font-size:5.2pt; }
+  .label-preview.tight .label-section{ font-size:3.9pt; line-height:1.05; -webkit-line-clamp:3; }
+  .label-preview.tight .label-logo{ height:2.4mm; }
 
-    .qty-btn{
-      padding: 4px 8px;
-      margin: 0 2px;
-      border-radius: 10px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      cursor:pointer;
-      font-size:12px;
-      font-weight:700;
-    }
-    .qty-btn:hover{ background: rgba(255,255,255,.08); }
+  /* Texte très long → priorité aux ingrédients (logo masqué) */
+  .label-preview.ultratight .label-name{ font-size:6.4pt; }
+  .label-preview.ultratight .label-section{ font-size:3.6pt; line-height:1.0; -webkit-line-clamp:5; }
+  .label-preview.ultratight .label-footer{ display:none; }
 
-    .qty-input{
-      width: 60px;
-      padding: 6px 6px;
-      border-radius: 10px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      color: var(--text);
-      font-size: 12px;
-      text-align:center;
-      outline:none;
-    }
+  /* Étiquette de production : gros nom, sans code-barres ni liste d'ingrédients */
+  .label-preview.production-label{ justify-content:center; }
+  .label-preview.production-label .label-header{ margin-bottom:0.6mm; }
+  .label-preview.production-label .label-name{
+    font-size:12pt;
+    line-height:1.05;
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+  }
+  .label-preview.production-label .label-dlc-top{ font-size:5.6pt; }
+  .label-preview.production-label .label-qty-top{ font-size:6.4pt; }
+  .label-preview.production-label .label-body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .label-preview.production-label .label-footer{ font-size:5.4pt; margin-top:0.8mm; }
 
-    .empty-hint{ font-size: 12px; color: var(--muted); }
-
-    /* ===================== ÉTIQUETTE (ton CSS original conservé, juste compatible thème) ===================== */
-    .label-preview {
-      border: 1px solid #333;
-      padding: 2.2mm 3mm 2mm 3mm;
-      box-sizing: border-box;
-      font-size: 10pt;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      background: #fff;
-      color: #000;
-    }
-
-    body.format-90 .label-preview { width: 90mm; height: 29mm; }
-    body.format-62 .label-preview { width: 62mm; height: auto; min-height: 29mm; }
-    body.format-29 .label-preview { width: 90mm; height: 29mm; }
-
-    .label-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 1mm;
-      flex-shrink: 0;
-    }
-
-    .label-header-left { flex: 1 1 40%; margin-right: 2mm; overflow: hidden; }
-    .label-header-center { flex: 0 0 auto; text-align: center; margin: 0 2mm; white-space: nowrap; }
-    .label-header-right { flex: 0 0 auto; text-align: right; min-width: 22mm; }
-
-    .label-name {
-      font-weight: 700;
-      font-size: 10pt;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .label-dlc-top { font-size: 8pt; font-weight: 700; }
-    .label-qty-top { font-size: 7.5pt; font-weight: 600; }
-
-    .label-body {
-      flex: 1 1 auto;
-      overflow: hidden;
-    }
-
-    .label-section {
-      font-size: 7.2pt;
-      line-height: 1.08;
-      margin-bottom: 0.45mm;
-    }
-
-    .label-barcode-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: 0.35mm 0 0 0;
-      width: calc(100% + 3mm);
-      margin-left: -1.5mm;
-      overflow: visible;
-    }
-
-    .label-barcode {
-      width: 100%;
-      max-width: none;
-      height: 40px;
-      display: block;
-    }
-
-    .label-footer {
-      flex-shrink: 0;
-      font-size: 5.5pt;
-      margin-top: 0.2mm;
-      text-align: center;
-    }
-
-    .label-preview.tight .label-name { font-size: 8pt; }
-    .label-preview.tight .label-dlc-top { font-size: 6.7pt; }
-    .label-preview.tight .label-qty-top { font-size: 6.3pt; }
-    .label-preview.tight .label-section { font-size: 5.8pt; line-height: 1.02; margin-bottom: 0.25mm; }
-    .label-preview.tight .label-footer { font-size: 4.8pt; margin-top: 0.15mm; }
-    .label-preview.tight .label-barcode { height: 34px; }
-    .label-preview.extra-tight .label-name { font-size: 7.2pt; }
-    .label-preview.extra-tight .label-dlc-top { font-size: 6pt; }
-    .label-preview.extra-tight .label-qty-top { font-size: 5.8pt; }
-    .label-preview.extra-tight .label-section {
-      font-size: 5pt;
-      line-height: 0.96;
-      margin-bottom: 0.12mm;
-      letter-spacing: -0.01em;
-    }
-    .label-preview.extra-tight .label-footer { font-size: 4.2pt; margin-top: 0.1mm; }
-    .label-preview.extra-tight .label-barcode { height: 28px; }
-
-    .label-preview.production-label {
-      justify-content: flex-start;
-      padding-top: 1.1mm;
-      padding-bottom: 1.1mm;
-    }
-    .label-preview.production-label .label-header {
-      align-items: flex-start;
-      margin-bottom: 0.8mm;
-    }
-    .label-preview.production-label .label-header-left {
-      flex: 1 1 100%;
-      margin-right: 0;
-    }
-    .label-preview.production-label .label-name {
-      font-size: 15.5pt;
-      line-height: 0.95;
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-    }
-    .label-preview.production-label .label-header-center {
-      flex: 0 0 auto;
-      margin: 0 1.5mm 0 0;
-      align-self: flex-end;
-    }
-    .label-preview.production-label .label-header-right {
-      min-width: 0;
-      align-self: flex-end;
-    }
-    .label-preview.production-label .label-dlc-top {
-      font-size: 9pt;
-    }
-    .label-preview.production-label .label-qty-top {
-      font-size: 10pt;
-    }
-    .label-preview.production-label .label-body {
-      flex: 1 1 auto;
-      min-height: 14mm;
-      display: flex;
-      align-items: flex-end;
-    }
-    .label-preview.production-label .label-body .label-name {
-      width: 100%;
-      font-size: 16pt;
-    }
-
-    @page { size: 90mm 29mm; margin: 0; }
-
-    @media print {
-      html, body { margin: 0 !important; padding: 0 !important; }
-      body.format-62 { width: 62mm !important; }
-      body.format-29 { width: 90mm !important; height: 29mm !important; }
-      body > * { display: none !important; }
-      .print-label-only { display: block !important; }
-      .print-label-only .label-preview { border: none !important; margin: 0 !important; }
-    }
-  </style>
+  @page{ size:51mm 26mm; margin:0; }
+  @media print{
+    html, body{ margin:0 !important; padding:0 !important; background:#fff !important; }
+    body > *{ display:none !important; }
+    .print-label-only{ display:block !important; }
+    .print-label-only .label-preview{ border:none !important; border-radius:0 !important; margin:0 !important; }
+  }
+</style>
 </head>
 
-<body class="format-90">
+<body>
   <div class="topbar">
     <div>
-      <h1>LABELIZER – Glaces & Sorbets</h1>
+      <h1>Labelizer</h1>
       <p class="subtitle">
-        Touchez un parfum pour l’ajouter au panier, ajustez les quantités, puis cliquez sur <b>Imprimer les étiquettes</b>.
-        La DLC est mise par défaut à <b>aujourd’hui + 4 mois</b> (modifiable).<br>
-        <span style="color:var(--muted)">Les parfums/ingrédients sont partagés et synchronisés en temps réel via Supabase.</span>
+        Touchez un parfum pour l'ajouter au panier, ajustez les quantités, puis imprimez.
+        La DLC est fixée par défaut à <b>aujourd'hui + 4 mois</b> (modifiable).
+        Parfums synchronisés en temps réel entre tous les appareils.
       </p>
     </div>
-
-    <span class="pill" id="rtPill">
-      <span class="dot">●</span> Temps réel: <b id="rtState">…</b>
-    </span>
+    <span class="pill"><span class="dot">●</span> Synchro : <b id="rtState">…</b></span>
   </div>
 
-  <div class="print-warning">
-    ✅ <b>Important :</b> lors de l’impression, vérifiez le <b>format papier / taille d’étiquette</b> (90×29, 62mm ou 29mm Brother).
-    Sinon l’étiquette peut sortir coupée ou mal centrée.
-  </div>
-
-  <div class="top-controls">
-    <div style="min-width:240px;">
-      <label for="labelFormat">Format d’étiquette</label>
-      <select id="labelFormat">
-        <option value="90">90 × 29 mm</option>
-        <option value="62">62 mm de large (hauteur auto)</option>
-        <option value="29">29 mm (Brother tape)</option>
-      </select>
-    </div>
-
-    <button class="btn secondary" id="btnImportDefaults" type="button" title="Ajoute tous les parfums par défaut dans Supabase (une fois)">
-      Importer les parfums par défaut
-    </button>
-
-    <span class="pill">
-      Astuce : <b>ajout/modif/suppression</b> des parfums = partagé ✔
-    </span>
-  </div>
+  <p class="banner">
+    Imprimante <b>Brother TD-2135NWB</b> · étiquettes <b>51 × 26 mm</b> · impression WiFi depuis la tablette.
+    Dans la boîte de dialogue d'impression, choisissez la Brother TD-2135NWB et vérifiez que le format de papier correspond à 51 × 26 mm (pas de marges).
+  </p>
 
   <div class="layout">
     <!-- COLONNE GAUCHE : PRODUITS -->
@@ -486,7 +355,7 @@
       <h2>Produits</h2>
 
       <div class="filter-row">
-        <div style="min-width:200px; flex:1;">
+        <div style="flex:1; min-width:160px;">
           <label for="filterCat">Catégorie</label>
           <select id="filterCat">
             <option value="Toutes">Toutes</option>
@@ -496,148 +365,117 @@
         </div>
       </div>
 
-      <small>Appuyez sur un produit pour l’ajouter au panier (1 unité).</small>
       <div class="product-list" id="productList"></div>
 
       <div class="divider"></div>
 
       <h2>Production</h2>
-      <small>Ajoutez rapidement une étiquette de bac de production au panier avec un volume prédéfini.</small>
+      <small style="margin-bottom:10px;">Étiquette de bac de production, avec date et volume.</small>
 
-      <div class="form-grid">
-        <div>
-          <label for="productionProduct">Produit</label>
-          <select id="productionProduct"></select>
-        </div>
-
-        <div>
-          <label for="productionSize">Contenant</label>
-          <select id="productionSize">
-            <option value="2.5 L">2.5 L</option>
-            <option value="5 L">5 L</option>
-          </select>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn" id="btnAddProduction" type="button">Add to cart</button>
-        </div>
+      <div class="field">
+        <label for="productionProduct">Produit</label>
+        <select id="productionProduct"></select>
       </div>
+      <div class="field">
+        <label for="productionSize">Contenant</label>
+        <select id="productionSize">
+          <option value="2.5 L">2.5 L</option>
+          <option value="5 L">5 L</option>
+        </select>
+      </div>
+      <button class="btn full" id="btnAddProduction" type="button">Ajouter au panier</button>
 
       <div class="divider"></div>
 
-      <h2>Ajouter / Modifier un parfum</h2>
-      <small>Tout est stocké dans Supabase. Donc visible sur tous les appareils.</small>
+      <h2>Ajouter / modifier un parfum</h2>
+      <small style="margin-bottom:10px;">Stocké dans Supabase, visible sur tous les appareils.</small>
 
-      <div class="form-grid">
-        <div>
-          <label for="editPick">Choisir un parfum à modifier</label>
-          <select id="editPick"></select>
-        </div>
+      <div class="field">
+        <label for="editPick">Parfum à modifier</label>
+        <select id="editPick"></select>
+      </div>
+      <div class="field">
+        <label for="editCat">Catégorie</label>
+        <select id="editCat">
+          <option value="Glace">Glace</option>
+          <option value="Sorbet">Sorbet</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="editName">Nom du parfum</label>
+        <input id="editName" type="text" placeholder="Ex : Noisette" />
+      </div>
+      <div class="field">
+        <label for="editIng">Ingrédients</label>
+        <textarea id="editIng" placeholder="Ex : LAIT, sucre, ... (allergènes en MAJUSCULE)"></textarea>
+      </div>
 
-        <div>
-          <label for="editCat">Catégorie</label>
-          <select id="editCat">
-            <option value="Glace">Glace</option>
-            <option value="Sorbet">Sorbet</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="editName">Nom du parfum</label>
-          <input id="editName" type="text" placeholder="Ex : Noisette" />
-        </div>
-
-        <div>
-          <label for="editIng">Ingrédients</label>
-          <textarea id="editIng" placeholder="Ex : LAIT, sucre, ... (allergènes en MAJUSCULE)"></textarea>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn" id="btnSaveProduct" type="button">Enregistrer (ajout / modif)</button>
-          <button class="btn danger" id="btnDeleteOne" type="button">Supprimer ce parfum</button>
-          <button class="btn secondary" id="btnUnhideAll" type="button">Réafficher les parfums masqués</button>
-        </div>
-
-        <small>
-          Astuce : pour modifier, sélectionne un parfum dans la liste. Pour ajouter, écris un nouveau nom.
-        </small>
+      <div class="btn-row">
+        <button class="btn" id="btnSaveProduct" type="button">Enregistrer</button>
+        <button class="btn danger" id="btnDeleteOne" type="button">Supprimer</button>
+        <button class="btn secondary" id="btnUnhideAll" type="button">Réafficher les masqués</button>
       </div>
     </div>
 
     <!-- COLONNE CENTRE : PARAMÈTRES + PANIER -->
     <div class="card">
-      <h2>Paramètres</h2>
+      <h2>Paramètres de l'étiquette</h2>
 
-      <div>
-        <label>Quantité (en L ou mL, affichée en haut à droite)</label>
-        <div class="inline-field">
-          <input id="inputPoids" type="text" placeholder="Ex : 500 mL">
-        </div>
+      <div class="field">
+        <label for="inputPoids">Quantité (affichée en haut à droite)</label>
+        <input id="inputPoids" type="text" placeholder="Ex : 500 mL">
       </div>
 
-      <div style="margin-top:10px;">
-        <label>DLC (par défaut : aujourd’hui + 4 mois)</label>
-        <div class="inline-field">
+      <div class="field">
+        <label for="inputDLC">DLC</label>
+        <div style="display:flex; gap:8px;">
           <input id="inputDLC" type="text" style="flex:1;">
-          <button class="btn secondary" id="btnResetDLC" type="button">Aujourd’hui + 4 mois</button>
+          <button class="btn secondary" id="btnResetDLC" type="button">+4 mois</button>
         </div>
       </div>
 
-      <div style="margin-top:10px;">
-        <label>Info conservation (facultatif)</label>
+      <div class="field">
+        <label for="inputConservation">Info conservation (facultatif)</label>
         <input id="inputConservation" type="text" placeholder="Ex : À conserver au frais après ouverture.">
       </div>
 
       <div class="divider"></div>
 
-      <h2>Panier d’étiquettes</h2>
-      <small>Chaque ligne = un parfum. Le nombre = nombre d’étiquettes à imprimer.</small>
-
-      <div id="cartContainer" style="margin-top:10px;"></div>
+      <h2>Panier</h2>
+      <div id="cartContainer"></div>
 
       <div class="btn-row">
-        <button class="btn danger" id="btnClearCart" type="button">Vider le panier</button>
-        <button class="btn" id="btnPrintAll" type="button">Imprimer les étiquettes</button>
+        <button class="btn danger" id="btnClearCart" type="button">Vider</button>
+        <button class="btn" id="btnPrintAll" type="button">Imprimer</button>
       </div>
     </div>
 
     <!-- COLONNE DROITE : APERÇU -->
     <div class="card">
-      <h2>Aperçu de l’étiquette</h2>
-      <small>Prévisualisation basée sur la première ligne du panier.</small>
+      <h2>Aperçu — 51 × 26 mm</h2>
+      <small style="margin-bottom:10px;">Basé sur la première ligne du panier.</small>
 
-      <div style="margin-top:10px;">
+      <div style="display:flex; justify-content:center; padding:10px 0;">
         <div class="label-preview" id="previewLabel">
           <div class="label-header">
-            <div class="label-header-left">
-              <div class="label-name" id="prevNom">Nom du produit</div>
-            </div>
-            <div class="label-header-center">
-              <div class="label-dlc-top" id="prevDLC">DLC : --/--/----</div>
-            </div>
-            <div class="label-header-right">
-              <div class="label-qty-top" id="prevPoids">1 L</div>
-            </div>
+            <div class="label-name" id="prevNom">Nom du produit</div>
+            <div class="label-qty-top" id="prevPoids">1 L</div>
           </div>
-
+          <div class="label-subheader">
+            <div class="label-dlc-top" id="prevDLC">DLC : --/--/----</div>
+          </div>
           <div class="label-body">
             <div class="label-section" id="prevIng">Ingrédients : …</div>
             <div class="label-section" id="prevCons"></div>
           </div>
-
           <div id="prevBarcodeWrap" class="label-barcode-wrap" style="display:none;">
             <svg id="prevBarcode" class="label-barcode"></svg>
           </div>
-
-          <div class="label-footer" id="prevFooter">
-            Vanille &amp; Compagnie, 43B Rue Reine Elisabeth, 1480 Tubize
-          </div>
+          <div class="label-footer" id="prevFooter"><img class="label-logo" src="data:image/png;base64,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" alt="Vanille &amp; Compagnie" /></div>
         </div>
-
-        <p class="empty-hint" id="previewHint" style="margin-top:8px;">
-          Ajoutez des produits au panier pour voir un exemple d’étiquette.
-        </p>
       </div>
+
+      <p class="empty-hint" id="previewHint">Ajoutez des produits au panier pour voir un exemple d'étiquette.</p>
     </div>
   </div>
 
@@ -651,7 +489,7 @@
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
     // ==========================
-    // CONFIG SUPABASE (À REMPLACER)
+    // CONFIG SUPABASE
     // ==========================
     const SUPABASE_URL = "https://gpysazxtguhuelrwgwhk.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdweXNhenh0Z3VodWVscndnd2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0NjkyMzksImV4cCI6MjA4MjA0NTIzOX0.LtgX4K81vS_pBprPcQ5zMEtygg9V9jHHxx1f-w08kTM";
@@ -668,9 +506,7 @@
       "Citron":"5419980668370"
     };
 
-    // ========= PRODUITS PAR DÉFAUT (TA LISTE) =========
     const defaultProducts = [
-      // GLACES
       { name: 'Fleur de lait', category: 'Glace', ingredients: 'LAIT, sucre, LAIT écrémé en poudre, dextrose, crème fraiche 40%, stabilisants (gomme de guar et farine de graines de caroube), alginate de sodium, arômes, émulsifiants (mono- et diglycérides d’acides gras), sel.' },
       { name: 'Coco', category: 'Glace', ingredients: 'LAIT, sucre, LAIT écrémé en poudre, dextrose, crème fraiche 40%, stabilisants (gomme de guar et farine de graines de caroube), alginate de sodium, arômes, émulsifiants (mono- et diglycérides d’acides gras), poudre de NOIX DE COCO, sirop de glucose, eau, alcool, arômes de coco, sel.' },
       { name: 'Chocolat blanc', category: 'Glace', ingredients: 'LAIT, sucre, LAIT écrémé en poudre, dextrose, crème fraiche 40%, stabilisants (gomme de guar et farine de graines de caroube), alginate de sodium, arômes, émulsifiants (mono- et diglycérides d’acides gras), CHOCOLAT BLANC (sucre, beurre de cacao, poudre de lait entier, émulsifiant lécithine de soja, arôme naturel de vanille), sel.' },
@@ -687,428 +523,309 @@
       { name: 'Yaourt Cerises', category: 'Glace', ingredients: 'YAOURT entier, LAIT, sucre, lait écrémé en poudre, dextrose, CERISES confites (50 %) (cerises, sirop de glucose-fructose, saccharose), sirop de glucose, jus de griottes (11 %), acidifiant (acide citrique), colorant (anthocyanes), arômes, stabilisants (farine de graines de caroube, gomme de guar), émulsifiants (mono- et diglycérides d’acides gras), protéines de LAIT.' },
       { name: 'Stracciatella', category: 'Glace', ingredients: 'LAIT, sucre, lait écrémé en poudre, dextrose, crème fraiche 40%, stabilisants (gomme de guar et farine de graines de caroube), alginate de sodium, arômes, émulsifiants (mono- et diglycérides d’acides gras), CHOCOLAT (pâte de cacao, sucre, beurre de cacao, émulsifiant lécithines de soja, arôme naturel de vanille), régulateur d’acidité (carbonates et hydrates de potassium), sel.' },
       { name: 'Choco-menthe', category: 'Glace', ingredients: 'LAIT, sucre, lait écrémé en poudre, dextrose, crème fraiche 40%, stabilisants (gomme de guar et farine de graines de caroube), alginate de sodium, arômes, émulsifiants (mono- et diglycérides d’acides gras), CHOCOLAT (pâte de cacao, sucre, beurre de cacao, émulsifiant lécithines de soja, arôme naturel de vanille), menthe, régulateur d’acidité (carbonates et hydrates de potassium), sel.' },
-
-      // SORBETS
       { name: 'Citron', category: 'Sorbet', ingredients: 'Eau, sucre, jus à base de concentrés : citron et orange, pulpe de citron, dextrose, stabilisants (farine de graines de caroube, gomme de guar), émulsifiants (mono- et diglycérides d’acides gras), acide citrique, maïzena, sirop de sucre inverti.' },
       { name: 'Fraise', category: 'Sorbet', ingredients: 'Eau, sucre, fraises, dextrose, sirop de glucose, acidifiant (acide citrique, colorants), stabilisants (farine de graines de caroube, gomme de guar), émulsifiants (mono- et diglycérides d’acides gras), acide citrique, sirop de citron, sirop de sucre inverti.' },
       { name: 'Framboise', category: 'Sorbet', ingredients: 'Eau, sucre, framboises, dextrose, stabilisants (farine de graines de caroube, gomme de guar), émulsifiants (mono- et diglycérides d’acides gras), acide citrique, sirop de citron, sirop de sucre inverti.' },
       { name: 'Mangue', category: 'Sorbet', ingredients: 'Eau, sucre, mangues, dextrose, stabilisants (farine de graines de caroube, gomme de guar), émulsifiants (mono- et diglycérides d’acides gras), acide citrique, sirop de citron, sirop de sucre inverti.' }
     ];
 
-    // ========= PRODUITS UTILISÉS PAR L'APP =========
-    let products = []; // vient de Supabase (hors hidden)
-    const cart = [];   // panier local (normal)
+    let products = [];
+    const cart = [];
+    const LOGO_SRC = document.querySelector('#prevFooter .label-logo').src;
 
-    // ========= UI REALTIME INDICATOR =========
     const rtState = document.getElementById("rtState");
     function setRT(state){
-      rtState.textContent = state ? "ON" : "OFF";
+      rtState.textContent = state ? "activée" : "hors ligne";
       rtState.className = state ? "ok" : "bad";
     }
     setRT(false);
 
-    // ========= OUTILS =========
-    function normalizeName(s) {
-      return (s || "")
-        .trim()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+    function normalizeName(s){
+      return (s || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    function formatDateDDMMYYYY(date) {
+    function formatDateDDMMYYYY(date){
       const d = String(date.getDate()).padStart(2, '0');
       const m = String(date.getMonth() + 1).padStart(2, '0');
       const y = date.getFullYear();
       return `${d}/${m}/${y}`;
     }
 
-    function todayPlus4Months() {
+    function todayPlus4Months(){
       const d = new Date();
       d.setMonth(d.getMonth() + 4);
       return formatDateDDMMYYYY(d);
     }
 
-    function isTight(ingredients, cons) {
+    // 51x26mm oblige : le texte se resserre en deux paliers selon sa longueur
+    function tightnessClass(ingredients, cons){
       const len = (ingredients || '').length + (cons || '').length;
-      return len > 220;
+      if (len > 260) return 'ultratight';
+      if (len > 150) return 'tight';
+      return '';
     }
 
-    function isExtraTight(ingredients, cons) {
-      const len = (ingredients || '').length + (cons || '').length;
-      return len > 300;
-    }
-
-    function escapeHtml(str) {
+    function escapeHtml(str){
       return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
     }
 
-    function getBarcodeValue(productName) {
-      return BARCODE_MAP[productName] || "";
-    }
+    function getBarcodeValue(productName){ return BARCODE_MAP[productName] || ""; }
 
-    function renderBarcode(target, value) {
+    const BARCODE_SIZES = {
+      normal:     { height: 24, width: 1.05, fontSize: 7 },
+      tight:      { height: 19, width: 0.9,  fontSize: 6 },
+      ultratight: { height: 15, width: 0.75, fontSize: 5 }
+    };
+
+    function renderBarcode(target, value, tier){
       if (!target) return;
-      if (!value || typeof JsBarcode === "undefined") {
-        target.innerHTML = "";
-        return;
-      }
-
+      if (!value || typeof JsBarcode === "undefined") { target.innerHTML = ""; return; }
+      const size = BARCODE_SIZES[tier] || BARCODE_SIZES.normal;
       try {
         JsBarcode(target, value, {
-          format: "EAN13",
-          displayValue: true,
-          fontSize: 10,
-          textMargin: 2,
-          margin: 0,
-          height: 40,
-          width: 2.1,
-          background: "#ffffff",
-          lineColor: "#000000"
+          format: "CODE128", displayValue: true, fontSize: size.fontSize, textMargin: 0.6,
+          margin: 0, height: size.height, width: size.width, background: "#ffffff", lineColor: "#000000"
         });
-      } catch (_err) {
-        target.innerHTML = "";
-      }
+      } catch (_err) { target.innerHTML = ""; }
     }
 
-    function syncProductionOptions() {
+    function syncProductionOptions(){
       const sel = document.getElementById("productionProduct");
       if (!sel) return;
-
       const current = sel.value;
       sel.innerHTML = "";
-
-      if (products.length === 0) {
+      if (products.length === 0){
         const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "Aucun produit";
+        opt.value = ""; opt.textContent = "Aucun produit";
         sel.appendChild(opt);
         return;
       }
-
       products.forEach(p => {
         const o = document.createElement("option");
         o.value = normalizeName(p.name);
         o.textContent = `${p.name} (${p.category})`;
         sel.appendChild(o);
       });
-
       if ([...sel.options].some(o => o.value === current)) sel.value = current;
     }
 
-    function getSelectedProductionProduct() {
+    function getSelectedProductionProduct(){
       const key = document.getElementById("productionProduct").value;
       return products.find(x => normalizeName(x.name) === key) || null;
     }
 
-    function getCartKey(product) {
+    function getCartKey(product){
       if (product.cartKey) return product.cartKey;
-      if (product.labelType === 'production') {
-        return `production::${product.name}::${product.productionSize || ''}`;
-      }
+      if (product.labelType === 'production') return `production::${product.name}::${product.productionSize || ''}`;
       return product.name;
     }
 
-    function getDisplayName(item) {
-      if (item.labelType === 'production') {
-        return `${item.name} [Production ${item.productionSize}]`;
-      }
+    function getDisplayName(item){
+      if (item.labelType === 'production') return `${item.name} [Production ${item.productionSize}]`;
       return item.name;
     }
 
-    // ========= SUPABASE : LOAD / SAVE =========
-    async function loadProductsFromDB() {
+    // ========= SUPABASE =========
+    async function loadProductsFromDB(){
       const { data, error } = await supabase
-        .from("products")
-        .select("*")
+        .from("products").select("*")
         .order("category", { ascending: true })
         .order("name", { ascending: true });
-
-      if (error) {
-        alert("Erreur chargement produits: " + error.message);
-        products = [];
-        return;
-      }
-
-      products = (data || [])
-        .filter(p => !p.hidden)
+      if (error){ alert("Erreur chargement produits: " + error.message); products = []; return; }
+      products = (data || []).filter(p => !p.hidden)
         .map(p => ({ name: p.name, category: p.category, ingredients: p.ingredients }));
-
       renderEditPick();
       syncProductionOptions();
     }
 
-    async function upsertProductToDB({ name, category, ingredients }) {
-      const { error } = await supabase
-        .from("products")
-        .upsert({
-          name,
-          category,
-          ingredients,
-          hidden: false,
-          updated_at: new Date().toISOString()
-        }, { onConflict: "name" });
-
+    async function upsertProductToDB({ name, category, ingredients }){
+      const { error } = await supabase.from("products").upsert(
+        { name, category, ingredients, hidden: false, updated_at: new Date().toISOString() },
+        { onConflict: "name" }
+      );
       if (error) throw error;
     }
 
-    async function hideProductInDB(name) {
-      const { error } = await supabase
-        .from("products")
-        .update({ hidden: true, updated_at: new Date().toISOString() })
-        .eq("name", name);
-
+    async function hideProductInDB(name){
+      const { error } = await supabase.from("products")
+        .update({ hidden: true, updated_at: new Date().toISOString() }).eq("name", name);
       if (error) throw error;
     }
 
-    async function unhideAllInDB() {
-      const { error } = await supabase
-        .from("products")
-        .update({ hidden: false, updated_at: new Date().toISOString() })
-        .eq("hidden", true);
-
+    async function unhideAllInDB(){
+      const { error } = await supabase.from("products")
+        .update({ hidden: false, updated_at: new Date().toISOString() }).eq("hidden", true);
       if (error) throw error;
     }
 
-    async function importDefaults() {
+    async function importDefaults(){
       const payload = defaultProducts.map(p => ({
-        name: p.name,
-        category: p.category,
-        ingredients: p.ingredients,
-        hidden: false,
-        updated_at: new Date().toISOString()
+        name: p.name, category: p.category, ingredients: p.ingredients,
+        hidden: false, updated_at: new Date().toISOString()
       }));
-
       const { error } = await supabase.from("products").upsert(payload, { onConflict: "name" });
       if (error) throw error;
     }
 
     // ========= RENDER PRODUITS =========
-    function renderProducts() {
+    function renderProducts(){
       const container = document.getElementById('productList');
       const filter = document.getElementById('filterCat').value;
       container.innerHTML = '';
-
       const list = products.filter(p => filter === 'Toutes' || p.category === filter);
-
-      if (list.length === 0) {
+      if (list.length === 0){
         container.innerHTML = `<p class="empty-hint">Aucun produit dans cette catégorie.</p>`;
         return;
       }
-
       list.forEach(p => {
         const btn = document.createElement('button');
         btn.className = 'product-btn';
         btn.type = 'button';
-        btn.innerHTML = `
-          <span class="product-name">${escapeHtml(p.name)}</span>
-          <span class="product-cat">${escapeHtml(p.category)}</span>
-        `;
+        btn.innerHTML = `<span class="product-name">${escapeHtml(p.name)}</span><span class="product-cat">${escapeHtml(p.category)}</span>`;
         btn.onclick = () => addToCart(p);
         container.appendChild(btn);
       });
     }
 
-    // ========= UI MODIF/SUPPRESSION =========
-    function renderEditPick() {
+    function renderEditPick(){
       const sel = document.getElementById("editPick");
       sel.innerHTML = "";
-
       const optNew = document.createElement("option");
-      optNew.value = "";
-      optNew.textContent = "— Nouveau parfum (ajout) —";
+      optNew.value = ""; optNew.textContent = "— Nouveau parfum (ajout) —";
       sel.appendChild(optNew);
-
       products.forEach(p => {
         const o = document.createElement("option");
         o.value = normalizeName(p.name);
         o.textContent = `${p.name} (${p.category})`;
         sel.appendChild(o);
       });
-
       loadPickedProductToForm(sel.value);
     }
 
-    function loadPickedProductToForm(key) {
+    function loadPickedProductToForm(key){
       const cat = document.getElementById("editCat");
       const name = document.getElementById("editName");
       const ing = document.getElementById("editIng");
-
-      if (!key) {
-        cat.value = "Glace";
-        name.value = "";
-        ing.value = "";
-        return;
-      }
-
+      if (!key){ cat.value = "Glace"; name.value = ""; ing.value = ""; return; }
       const p = products.find(x => normalizeName(x.name) === key);
       if (!p) return;
-
-      cat.value = p.category;
-      name.value = p.name;
-      ing.value = p.ingredients;
+      cat.value = p.category; name.value = p.name; ing.value = p.ingredients;
     }
 
-    async function handleSaveProduct() {
+    async function handleSaveProduct(){
       const pickKey = document.getElementById("editPick").value;
       const cat = document.getElementById("editCat").value.trim();
       const name = document.getElementById("editName").value.trim();
       const ing  = document.getElementById("editIng").value.trim();
-
-      if (!cat || !name || !ing) {
-        alert("Veuillez remplir : catégorie + nom + ingrédients.");
-        return;
-      }
-
+      if (!cat || !name || !ing){ alert("Veuillez remplir : catégorie + nom + ingrédients."); return; }
       try {
         await upsertProductToDB({ name, category: cat, ingredients: ing });
         alert(pickKey ? "Parfum modifié ✅" : "Parfum ajouté ✅");
-      } catch (e) {
-        alert("Erreur sauvegarde: " + (e?.message || e));
-      }
+      } catch (e) { alert("Erreur sauvegarde: " + (e?.message || e)); }
     }
 
-    async function handleDeleteOne() {
+    async function handleDeleteOne(){
       const pickKey = document.getElementById("editPick").value;
-      if (!pickKey) {
-        alert("Choisis d’abord un parfum à supprimer.");
-        return;
-      }
-
+      if (!pickKey){ alert("Choisis d’abord un parfum à supprimer."); return; }
       const p = products.find(x => normalizeName(x.name) === pickKey);
       if (!p) return;
-
       const ok = confirm("Supprimer ce parfum ? (Il sera masqué, réversible via “Réafficher…”.)");
       if (!ok) return;
-
       try {
         await hideProductInDB(p.name);
-
         const inCartIdx = cart.findIndex(c => normalizeName(c.name) === pickKey);
         if (inCartIdx >= 0) cart.splice(inCartIdx, 1);
-
         alert("Parfum supprimé (masqué) ✅");
-      } catch (e) {
-        alert("Erreur suppression: " + (e?.message || e));
-      }
+      } catch (e) { alert("Erreur suppression: " + (e?.message || e)); }
     }
 
-    async function handleUnhideAll() {
+    async function handleUnhideAll(){
       const ok = confirm("Réafficher TOUS les parfums masqués ?");
       if (!ok) return;
-
-      try {
-        await unhideAllInDB();
-        alert("Parfums masqués réaffichés ✅");
-      } catch (e) {
-        alert("Erreur réaffichage: " + (e?.message || e));
-      }
+      try { await unhideAllInDB(); alert("Parfums masqués réaffichés ✅"); }
+      catch (e) { alert("Erreur réaffichage: " + (e?.message || e)); }
     }
 
     // ========= PANIER =========
-    function addToCart(product) {
+    function addToCart(product){
       const cartKey = getCartKey(product);
       const existing = cart.find(item => item.cartKey === cartKey);
       if (existing) existing.qty += 1;
       else cart.push({ ...product, cartKey, qty: 1 });
-
       renderCart();
       updatePreviewLabel();
     }
 
-    function handleAddProduction() {
+    function handleAddProduction(){
       const product = getSelectedProductionProduct();
-      if (!product) {
-        alert("Choisissez un produit pour la production.");
-        return;
-      }
-
+      if (!product){ alert("Choisissez un produit pour la production."); return; }
       const weight = document.getElementById("productionSize").value;
       addToCart({
-        ...product,
-        labelType: 'production',
-        productionSize: weight,
+        ...product, labelType: 'production', productionSize: weight,
         productionDate: formatDateDDMMYYYY(new Date()),
         cartKey: `production::${product.name}::${weight}`
       });
     }
 
-    // Exposer pour les onclick générés
-    window.changeQty = function(name, delta) {
+    window.changeQty = function(name, delta){
       const item = cart.find(c => c.cartKey === name);
       if (!item) return;
       item.qty += delta;
       if (item.qty <= 0) cart.splice(cart.indexOf(item), 1);
-      renderCart();
-      updatePreviewLabel();
+      renderCart(); updatePreviewLabel();
     };
 
-    window.setQty = function(name, value) {
+    window.setQty = function(name, value){
       const n = parseInt(value, 10);
       const item = cart.find(c => c.cartKey === name);
       if (!item) return;
-
       if (isNaN(n) || n <= 0) cart.splice(cart.indexOf(item), 1);
       else item.qty = n;
-
-      renderCart();
-      updatePreviewLabel();
+      renderCart(); updatePreviewLabel();
     };
 
-    window.removeFromCart = function(name) {
+    window.removeFromCart = function(name){
       const idx = cart.findIndex(c => c.cartKey === name);
       if (idx >= 0) cart.splice(idx, 1);
-      renderCart();
-      updatePreviewLabel();
+      renderCart(); updatePreviewLabel();
     };
 
-    function clearCart() {
-      cart.splice(0, cart.length);
-      renderCart();
-      updatePreviewLabel();
-    }
+    function clearCart(){ cart.splice(0, cart.length); renderCart(); updatePreviewLabel(); }
 
-    function renderCart() {
+    function renderCart(){
       const container = document.getElementById('cartContainer');
-      if (cart.length === 0) {
+      if (cart.length === 0){
         container.innerHTML = '<p class="empty-hint">Panier vide. Touchez un parfum à gauche pour commencer.</p>';
         return;
       }
-
-      let html = '<table class="cart-table"><thead><tr><th>Produit</th><th>Cat.</th><th>Qté</th><th></th></tr></thead><tbody>';
+      let html = '<table class="cart-table"><thead><tr><th>Produit</th><th>Qté</th><th></th></tr></thead><tbody>';
       cart.forEach(item => {
         const safeName = item.cartKey.replace(/'/g, "\\'");
         html += `
           <tr>
             <td>${escapeHtml(getDisplayName(item))}</td>
-            <td>${escapeHtml(item.labelType === 'production' ? 'Production' : item.category)}</td>
             <td class="qty-cell">
-              <button class="qty-btn" onclick="changeQty('${safeName}', -1)">-</button>
-              <input class="qty-input" type="number" min="0" value="${item.qty}"
-                     onchange="setQty('${safeName}', this.value)">
+              <button class="qty-btn" onclick="changeQty('${safeName}', -1)">–</button>
+              <input class="qty-input" type="number" min="0" value="${item.qty}" onchange="setQty('${safeName}', this.value)">
               <button class="qty-btn" onclick="changeQty('${safeName}', 1)">+</button>
             </td>
-            <td><button class="qty-btn" onclick="removeFromCart('${safeName}')">X</button></td>
-          </tr>
-        `;
+            <td><button class="qty-btn" onclick="removeFromCart('${safeName}')">✕</button></td>
+          </tr>`;
       });
       html += '</tbody></table>';
       container.innerHTML = html;
     }
 
-    function getCommonFields() {
+    function getCommonFields(){
       const poids = document.getElementById('inputPoids').value.trim();
       const dlc = document.getElementById('inputDLC').value.trim() || '--/--/----';
       const cons = document.getElementById('inputConservation').value.trim();
       return { poids, dlc, cons };
     }
 
-    function updatePreviewLabel() {
+    function updatePreviewLabel(){
       const prevLabel = document.getElementById('previewLabel');
       const prevNom = document.getElementById('prevNom');
       const prevIng = document.getElementById('prevIng');
@@ -1120,9 +837,9 @@
       const prevFooter = document.getElementById('prevFooter');
       const hint = document.getElementById('previewHint');
 
-      if (cart.length === 0) {
-        prevLabel.classList.remove('tight');
-        prevLabel.classList.remove('extra-tight');
+      prevLabel.classList.remove('tight', 'ultratight', 'production-label');
+
+      if (cart.length === 0){
         prevNom.textContent = 'Nom du produit';
         prevIng.textContent = 'Ingrédients : …';
         prevCons.textContent = '';
@@ -1141,11 +858,9 @@
       const barcode = getBarcodeValue(first.name);
       prevNom.textContent = first.name;
 
-      if (first.labelType === 'production') {
+      if (first.labelType === 'production'){
         prevLabel.classList.add('production-label');
-        prevLabel.classList.remove('tight');
-        prevLabel.classList.remove('extra-tight');
-        prevIng.textContent = first.name;
+        prevIng.textContent = '';
         prevCons.textContent = '';
         prevPoids.textContent = first.productionSize || '1 L';
         prevDLC.textContent = 'Production : ' + (first.productionDate || formatDateDDMMYYYY(new Date()));
@@ -1153,83 +868,63 @@
         prevBarcode.innerHTML = '';
         prevFooter.style.display = 'none';
       } else {
-        prevLabel.classList.remove('production-label');
         prevIng.textContent = 'Ingrédients : ' + first.ingredients;
         prevCons.textContent = cons || '';
         prevPoids.textContent = poids || '1 L';
         prevDLC.textContent = 'DLC : ' + dlc;
         prevFooter.style.display = 'block';
 
-        if (barcode) {
+        const tc = tightnessClass(first.ingredients, cons);
+        if (tc) prevLabel.classList.add(tc);
+
+        if (barcode){
           prevBarcodeWrap.style.display = 'flex';
-          renderBarcode(prevBarcode, barcode);
+          renderBarcode(prevBarcode, barcode, tc || 'normal');
         } else {
           prevBarcodeWrap.style.display = 'none';
           prevBarcode.innerHTML = '';
         }
-
-        if (isTight(first.ingredients, cons)) prevLabel.classList.add('tight');
-        else prevLabel.classList.remove('tight');
-        if (isExtraTight(first.ingredients, cons)) prevLabel.classList.add('extra-tight');
-        else prevLabel.classList.remove('extra-tight');
       }
     }
 
     // ========= IMPRESSION =========
-    function buildPrintLabels() {
+    function buildPrintLabels(){
       const container = document.getElementById('printLabelsContainer');
       container.innerHTML = '';
       if (cart.length === 0) return;
-
       const { poids, dlc, cons } = getCommonFields();
 
       cart.forEach(item => {
-        const tight = item.labelType === 'production' ? false : isTight(item.ingredients, cons);
-        const extraTight = item.labelType === 'production' ? false : isExtraTight(item.ingredients, cons);
+        const tc = item.labelType === 'production' ? '' : tightnessClass(item.ingredients, cons);
         const barcode = getBarcodeValue(item.name);
-        for (let i = 0; i < item.qty; i++) {
+        for (let i = 0; i < item.qty; i++){
           const wrap = document.createElement('div');
-          wrap.className = 'label-preview' + (tight ? ' tight' : '');
-          if (extraTight) wrap.className += ' extra-tight';
-          if (item.labelType === 'production') {
+          wrap.className = 'label-preview' + (tc ? ' ' + tc : '');
+          if (item.labelType === 'production'){
             wrap.className += ' production-label';
             wrap.innerHTML = `
               <div class="label-header">
-                <div class="label-header-left">
-                  <div></div>
-                </div>
-                <div class="label-header-center">
-                  <div class="label-dlc-top">Production : ${escapeHtml(item.productionDate || formatDateDDMMYYYY(new Date()))}</div>
-                </div>
-                <div class="label-header-right">
-                  <div class="label-qty-top">${escapeHtml(item.productionSize || '1 L')}</div>
-                </div>
+                <div></div>
+                <div class="label-qty-top">${escapeHtml(item.productionSize || '1 L')}</div>
               </div>
-              <div class="label-body">
-                <div class="label-name">${escapeHtml(item.name)}</div>
-              </div>
+              <div class="label-body"><div class="label-name">${escapeHtml(item.name)}</div></div>
+              <div class="label-footer">Production : ${escapeHtml(item.productionDate || formatDateDDMMYYYY(new Date()))}</div>
             `;
           } else {
             wrap.innerHTML = `
               <div class="label-header">
-                <div class="label-header-left">
-                  <div class="label-name">${escapeHtml(item.name)}</div>
-                </div>
-                <div class="label-header-center">
-                  <div class="label-dlc-top">DLC : ${escapeHtml(dlc || '--/--/----')}</div>
-                </div>
-                <div class="label-header-right">
-                  <div class="label-qty-top">${escapeHtml(poids || '1 L')}</div>
-                </div>
+                <div class="label-name">${escapeHtml(item.name)}</div>
+                <div class="label-qty-top">${escapeHtml(poids || '1 L')}</div>
+              </div>
+              <div class="label-subheader">
+                <div class="label-dlc-top">DLC : ${escapeHtml(dlc || '--/--/----')}</div>
               </div>
               <div class="label-body">
                 <div class="label-section">Ingrédients : ${escapeHtml(item.ingredients)}</div>
                 ${cons ? `<div class="label-section">${escapeHtml(cons)}</div>` : ''}
               </div>
-              ${barcode ? '<div class="label-barcode-wrap"><svg class="label-barcode" data-barcode="' + escapeHtml(barcode) + '"></svg></div>' : ''}
-              <div class="label-footer">
-                Vanille &amp; Compagnie, 43B Rue Reine Elisabeth, 1480 Tubize
-              </div>
+              ${barcode ? '<div class="label-barcode-wrap"><svg class="label-barcode" data-barcode="' + escapeHtml(barcode) + '" data-tier="' + (tc || 'normal') + '"></svg></div>' : ''}
+              <div class="label-footer"><img class="label-logo" src="${LOGO_SRC}" alt="Vanille &amp; Compagnie" /></div>
             `;
           }
           container.appendChild(wrap);
@@ -1237,31 +932,19 @@
       });
 
       container.querySelectorAll('[data-barcode]').forEach(node => {
-        renderBarcode(node, node.getAttribute('data-barcode'));
+        renderBarcode(node, node.getAttribute('data-barcode'), node.getAttribute('data-tier'));
       });
     }
 
-    function handlePrintAll() {
-      if (cart.length === 0) {
-        alert('Panier vide. Ajoutez au moins un produit.');
-        return;
-      }
+    function handlePrintAll(){
+      if (cart.length === 0){ alert('Panier vide. Ajoutez au moins un produit.'); return; }
       buildPrintLabels();
       updatePreviewLabel();
       window.print();
     }
 
-    // ========= FORMAT =========
-    function updateFormatClass() {
-      const format = document.getElementById('labelFormat').value;
-      document.body.classList.remove('format-90', 'format-62', 'format-29');
-      if (format === '62') document.body.classList.add('format-62');
-      else if (format === '29') document.body.classList.add('format-29');
-      else document.body.classList.add('format-90');
-    }
-
     // ========= REALTIME =========
-    function setupRealtime() {
+    function setupRealtime(){
       supabase.channel("rt-products")
         .on("postgres_changes", { event: "*", schema: "public", table: "products" }, async () => {
           await loadProductsFromDB();
@@ -1269,9 +952,7 @@
           renderCart();
           updatePreviewLabel();
         })
-        .subscribe((status) => {
-          setRT(status === "SUBSCRIBED");
-        });
+        .subscribe((status) => { setRT(status === "SUBSCRIBED"); });
     }
 
     // ========= INIT =========
@@ -1285,40 +966,29 @@
       updatePreviewLabel();
     });
 
-    document.getElementById('labelFormat').addEventListener('change', updateFormatClass);
-
     ['inputPoids', 'inputDLC', 'inputConservation'].forEach(id => {
       document.getElementById(id).addEventListener('input', updatePreviewLabel);
     });
 
-    document.getElementById("editPick").addEventListener("change", (e) => {
-      loadPickedProductToForm(e.target.value);
-    });
-
+    document.getElementById("editPick").addEventListener("change", (e) => loadPickedProductToForm(e.target.value));
     document.getElementById("btnSaveProduct").addEventListener("click", handleSaveProduct);
     document.getElementById("btnDeleteOne").addEventListener("click", handleDeleteOne);
     document.getElementById("btnUnhideAll").addEventListener("click", handleUnhideAll);
 
-    document.getElementById("btnImportDefaults").addEventListener("click", async () => {
-      const ok = confirm("Importer/mettre à jour les parfums par défaut dans Supabase ?");
-      if (!ok) return;
-      try {
-        await importDefaults();
-        alert("Import terminé ✅");
-      } catch (e) {
-        alert("Erreur import: " + (e?.message || e));
-      }
-    });
-
     document.getElementById('inputPoids').value = '1 L';
     document.getElementById('inputDLC').value = todayPlus4Months();
 
-    updateFormatClass();
     await loadProductsFromDB();
     renderProducts();
     renderCart();
     updatePreviewLabel();
     setupRealtime();
+
+    // Import initial des parfums par défaut si la base est vide (silencieux, une seule fois)
+    if (products.length === 0){
+      try { await importDefaults(); await loadProductsFromDB(); renderProducts(); }
+      catch (_e) { /* silencieux : l'utilisateur peut réessayer manuellement si besoin */ }
+    }
   </script>
 </body>
 </html>
