@@ -327,7 +327,7 @@
   }
   .label-preview.production-label .label-footer{ font-size:5.4pt; margin-top:0.8mm; }
 
-  @page{ size:26mm 51mm; margin:0; }
+  @page{ size:51mm 26mm; margin:0; }
   @media print{
     html, body{ margin:0 !important; padding:0 !important; background:#fff !important; }
     body > *{ display:none !important; }
@@ -430,8 +430,8 @@
       <div class="field">
         <label for="labelOrientation">Orientation du rouleau</label>
         <select id="labelOrientation">
-          <option value="portrait" selected>Portrait (26 × 51 mm)</option>
-          <option value="landscape">Paysage (51 × 26 mm)</option>
+          <option value="portrait">Portrait (26 × 51 mm)</option>
+          <option value="landscape" selected>Paysage (51 × 26 mm)</option>
         </select>
       </div>
 
@@ -998,7 +998,10 @@
     document.getElementById('btnClearCart').addEventListener('click', clearCart);
     document.getElementById('btnPrintAll').addEventListener('click', handlePrintAll);
     document.getElementById('btnAddProduction').addEventListener('click', handleAddProduction);
-    document.getElementById('labelOrientation').addEventListener('change', updatePreviewLabel);
+    document.getElementById('labelOrientation').addEventListener('change', () => {
+      setPrintPageSize(getOrientation());
+      updatePreviewLabel();
+    });
 
     document.getElementById('btnResetDLC').addEventListener('click', () => {
       document.getElementById('inputDLC').value = todayPlus4Months();
@@ -1020,6 +1023,7 @@
     await loadProductsFromDB();
     renderProducts();
     renderCart();
+    setPrintPageSize(getOrientation());
     updatePreviewLabel();
     setupRealtime();
 
