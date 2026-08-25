@@ -216,10 +216,10 @@
 
   .empty-hint{ font-size:12.5px; color:var(--muted); padding:10px 2px; }
 
-  /* ===================== ÉTIQUETTE — Brother TD-2135NWB, 51 × 26 mm ===================== */
+  /* ===================== ÉTIQUETTE — Brother TD-2135NWB, rouleau 26 × 51 mm ===================== */
   .label-preview{
-    width:51mm;
-    height:26mm;
+    width:26mm;
+    height:51mm;
     border:1px solid var(--border);
     border-radius:2px;
     padding:1.3mm 1.7mm;
@@ -231,6 +231,7 @@
     color:#000;
     overflow:hidden;
   }
+  .label-preview.orient-landscape{ width:51mm; height:26mm; }
 
   .label-header{
     display:flex;
@@ -302,6 +303,11 @@
   .label-preview.ultratight .label-section{ font-size:3.6pt; line-height:1.0; -webkit-line-clamp:5; }
   .label-preview.ultratight .label-footer{ display:none; }
 
+  /* Orientation portrait (26×51mm) : bien plus de hauteur → on autorise plus de lignes */
+  .label-preview:not(.orient-landscape) .label-section{ -webkit-line-clamp:9; }
+  .label-preview:not(.orient-landscape).tight .label-section{ -webkit-line-clamp:7; }
+  .label-preview:not(.orient-landscape).ultratight .label-section{ -webkit-line-clamp:10; }
+
   /* Étiquette de production : gros nom, sans code-barres ni liste d'ingrédients */
   .label-preview.production-label{ justify-content:center; }
   .label-preview.production-label .label-header{ margin-bottom:0.6mm; }
@@ -321,7 +327,7 @@
   }
   .label-preview.production-label .label-footer{ font-size:5.4pt; margin-top:0.8mm; }
 
-  @page{ size:51mm 26mm; margin:0; }
+  @page{ size:26mm 51mm; margin:0; }
   @media print{
     html, body{ margin:0 !important; padding:0 !important; background:#fff !important; }
     body > *{ display:none !important; }
@@ -420,6 +426,14 @@
     <!-- COLONNE CENTRE : PARAMÈTRES + PANIER -->
     <div class="card">
       <h2>Paramètres de l'étiquette</h2>
+
+      <div class="field">
+        <label for="labelOrientation">Orientation du rouleau</label>
+        <select id="labelOrientation">
+          <option value="portrait" selected>Portrait (26 × 51 mm)</option>
+          <option value="landscape">Paysage (51 × 26 mm)</option>
+        </select>
+      </div>
 
       <div class="field">
         <label for="inputPoids">Quantité (affichée en haut à droite)</label>
@@ -825,6 +839,26 @@
       return { poids, dlc, cons };
     }
 
+    function getOrientation(){
+      return document.getElementById('labelOrientation').value;
+    }
+
+    function applyOrientationClass(el, orientation){
+      el.classList.remove('orient-landscape');
+      if (orientation === 'landscape') el.classList.add('orient-landscape');
+    }
+
+    function setPrintPageSize(orientation){
+      let styleEl = document.getElementById('dynamicPageSize');
+      if (!styleEl){
+        styleEl = document.createElement('style');
+        styleEl.id = 'dynamicPageSize';
+        document.head.appendChild(styleEl);
+      }
+      const size = orientation === 'landscape' ? '51mm 26mm' : '26mm 51mm';
+      styleEl.textContent = `@page{ size:${size}; margin:0; }`;
+    }
+
     function updatePreviewLabel(){
       const prevLabel = document.getElementById('previewLabel');
       const prevNom = document.getElementById('prevNom');
@@ -838,6 +872,7 @@
       const hint = document.getElementById('previewHint');
 
       prevLabel.classList.remove('tight', 'ultratight', 'production-label');
+      applyOrientationClass(prevLabel, getOrientation());
 
       if (cart.length === 0){
         prevNom.textContent = 'Nom du produit';
@@ -893,13 +928,15 @@
       container.innerHTML = '';
       if (cart.length === 0) return;
       const { poids, dlc, cons } = getCommonFields();
+      const orientation = getOrientation();
+      const orientClass = orientation === 'landscape' ? ' orient-landscape' : '';
 
       cart.forEach(item => {
         const tc = item.labelType === 'production' ? '' : tightnessClass(item.ingredients, cons);
         const barcode = getBarcodeValue(item.name);
         for (let i = 0; i < item.qty; i++){
           const wrap = document.createElement('div');
-          wrap.className = 'label-preview' + (tc ? ' ' + tc : '');
+          wrap.className = 'label-preview' + orientClass + (tc ? ' ' + tc : '');
           if (item.labelType === 'production'){
             wrap.className += ' production-label';
             wrap.innerHTML = `
@@ -938,6 +975,7 @@
 
     function handlePrintAll(){
       if (cart.length === 0){ alert('Panier vide. Ajoutez au moins un produit.'); return; }
+      setPrintPageSize(getOrientation());
       buildPrintLabels();
       updatePreviewLabel();
       window.print();
@@ -960,6 +998,7 @@
     document.getElementById('btnClearCart').addEventListener('click', clearCart);
     document.getElementById('btnPrintAll').addEventListener('click', handlePrintAll);
     document.getElementById('btnAddProduction').addEventListener('click', handleAddProduction);
+    document.getElementById('labelOrientation').addEventListener('change', updatePreviewLabel);
 
     document.getElementById('btnResetDLC').addEventListener('click', () => {
       document.getElementById('inputDLC').value = todayPlus4Months();
